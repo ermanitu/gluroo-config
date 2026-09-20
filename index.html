@@ -1,163 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title id="page-title">Gluroo Settings</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Configuración Gluroo / Nightscout</title>
   <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --primary: #ff4757;
+      --primary-hover: #e84118;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --input-bg: #0f172a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f2f2f7;
-      color: #1c1c1e;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 24px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .card {
-      background: #ffffff;
-      border-radius: 12px;
+      background-color: var(--bg);
+      color: var(--text);
       padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 440px;
+      background-color: var(--card);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+    }
+    .header {
+      text-align: center;
       margin-bottom: 20px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+    .header h1 {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .header p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .form-group {
+      margin-bottom: 18px;
     }
     label {
       display: block;
+      font-size: 0.85rem;
       font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #3a3a3c;
+      margin-bottom: 6px;
+      color: var(--text);
     }
-    input[type="text"] {
+    .input-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="url"] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d1d6;
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s ease;
-      font-family: monospace;
+      padding: 12px 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
     }
     input:focus {
-      border-color: #ff4700;
-    }
-    .help-text {
-      font-size: 12px;
-      color: #8e8e93;
-      margin-top: 6px;
-      line-height: 1.4;
-    }
-    .btn {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-sizing: border-box;
+      outline: none;
+      border-color: var(--primary);
     }
     .btn-save {
-      background-color: #ff4700; /* Pebble Orange */
-      color: #ffffff;
-      margin-bottom: 12px;
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
     }
-    .btn-cancel {
-      background-color: #e5e5ea;
-      color: #1c1c1e;
+    .btn-save:active {
+      background-color: var(--primary-hover);
+      transform: scale(0.98);
     }
+    .help-card {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .help-card strong { color: var(--text); }
   </style>
 </head>
 <body>
 
-  <h2 id="header-title">Gluroo Settings</h2>
+  <div class="container">
+    <div class="header">
+      <h1>🩸 Gluroo / Nightscout</h1>
+      <p>Configuración de glucemia para tu Pebble</p>
+    </div>
 
-  <div class="card">
-    <label for="api_key" id="label-api">Gluroo API Key / Token:</label>
-    <input 
-      type="text" 
-      id="api_key" 
-      placeholder="e8bae8c4-0c1e-4b5b-9387-698fc0fd6cf4" 
-      spellcheck="false" 
-      autocorrect="off" 
-      autocapitalize="none"
-    >
-    <div class="help-text" id="help-text">Enter your Gluroo access token.</div>
+    <form id="configForm">
+      <div class="form-group">
+        <label for="nightscout_url">1. URL del Servidor / Gluroo</label>
+        <div class="input-desc">Incluye el puerto asignado (ej: <code>https://e8ba.ns.gluroo.com:39893</code>)</div>
+        <input type="text" id="nightscout_url" placeholder="https://xxxx.ns.gluroo.com:PUERTO" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+
+      <div class="form-group">
+        <label for="api_key">2. Token de Seguridad / API Secret</label>
+        <div class="input-desc">Token alfanumérico copiado de Gluroo</div>
+        <input type="text" id="api_key" placeholder="e8bae8c4-0c1e-4b5b-9387-698fc0fd6cf4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+
+      <button type="submit" class="btn-save">💾 Guardar Configuración</button>
+    </form>
+
+    <div class="help-card">
+      <strong>¿Dónde encontrar estos datos?</strong><br>
+      Abre la app <strong>Gluroo</strong> en tu móvil ➡️ ⚙️ <strong>Ajustes</strong> ➡️ <strong>Account</strong> (o <em>Nightscout Bridge</em>) y copia tu <strong>Nightscout Host/URL</strong> y tu <strong>Security Token</strong>.
+    </div>
   </div>
 
-  <button class="btn btn-save" id="btn-save">Save API Key</button>
-  <button class="btn btn-cancel" id="btn-cancel">Cancel</button>
-
   <script>
-    var i18n = {
-      es: {
-        title: "Ajustes de Gluroo",
-        header: "Ajustes de Gluroo",
-        label: "API Key / Token de Gluroo:",
-        placeholder: "Pega tu token de Gluroo aquí",
-        help: "Introduce el token de acceso de tu cuenta Gluroo.",
-        save: "Guardar Token",
-        cancel: "Cancelar"
-      },
-      en: {
-        title: "Gluroo Settings",
-        header: "Gluroo Settings",
-        label: "Gluroo API Key / Token:",
-        placeholder: "Paste your Gluroo token here",
-        help: "Enter your Gluroo access token.",
-        save: "Save API Key",
-        cancel: "Cancel"
-      }
-    };
-
-    var userLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-    var lang = userLang.indexOf('es') === 0 ? 'es' : 'en';
-    var t = i18n[lang];
-
-    document.getElementById('page-title').innerText = t.title;
-    document.getElementById('header-title').innerText = t.header;
-    document.getElementById('label-api').innerText = t.label;
-    document.getElementById('api_key').placeholder = t.placeholder;
-    document.getElementById('help-text').innerText = t.help;
-    document.getElementById('btn-save').innerText = t.save;
-    document.getElementById('btn-cancel').innerText = t.cancel;
-
-    function getQueryParam(variable, defaultValue) {
-      var query = location.search.substring(1);
+    // 1. Leer parámetros iniciales de la URL (si Pebble los envía)
+    function getQueryParam(variable, defaultVal) {
+      var query = window.location.search.substring(1);
       var vars = query.split('&');
       for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split('=');
-        if (pair[0] === variable) {
-          return decodeURIComponent(pair[1]);
+        if (decodeURIComponent(pair[0]) === variable) {
+          return decodeURIComponent(pair[1] || '');
         }
       }
-      return defaultValue || false;
+      return defaultVal || '';
     }
 
-    var prefillKey = getQueryParam('api_key', '');
-    if (prefillKey) {
-      document.getElementById('api_key').value = prefillKey;
-    }
+    // Cargar valores iniciales
+    var urlInput = document.getElementById('nightscout_url');
+    var keyInput = document.getElementById('api_key');
 
-    document.getElementById('btn-save').addEventListener('click', function() {
-      var keyValue = document.getElementById('api_key').value.trim();
+    var initialUrl = getQueryParam('url') || getQueryParam('nightscout_url') || localStorage.getItem('nightscout_url') || '';
+    var initialKey = getQueryParam('api_key') || getQueryParam('gluroo_token') || getQueryParam('token') || localStorage.getItem('api_key') || '';
 
-      var configData = {
-        'api_key': keyValue
+    if (initialUrl) urlInput.value = initialUrl;
+    if (initialKey) keyInput.value = initialKey;
+
+    // 2. Guardar y enviar de vuelta a Pebble
+    document.getElementById('configForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var enteredUrl = urlInput.value.trim();
+      var enteredKey = keyInput.value.trim();
+
+      // Si el usuario pegó la URL completa en el campo de Token, intentar auto-extraer
+      if (enteredKey.indexOf('http') === 0 && !enteredUrl) {
+        enteredUrl = enteredKey;
+        enteredKey = '';
+      }
+
+      // Limpiar URL: quitar /api/v1... o barras al final
+      if (enteredUrl) {
+        enteredUrl = enteredUrl.replace(/\/api\/v1.*$/i, '').replace(/\/+$/, '');
+      }
+
+      var config = {
+        nightscout_url: enteredUrl,
+        api_key: enteredKey,
+        gluroo_token: enteredKey // retrocompatibilidad
       };
 
-      var return_to = getQueryParam('return_to', 'pebblejs://close#');
-      document.location = return_to + encodeURIComponent(JSON.stringify(configData));
-    });
+      // Guardar localmente en el navegador del móvil
+      if (enteredUrl) localStorage.setItem('nightscout_url', enteredUrl);
+      if (enteredKey) localStorage.setItem('api_key', enteredKey);
 
-    document.getElementById('btn-cancel').addEventListener('click', function() {
-      var return_to = getQueryParam('return_to', 'pebblejs://close#');
-      document.location = return_to;
+      // Enviar resultado de vuelta a la app Pebble de Android / iOS
+      var returnTo = getQueryParam('return_to', 'pebblejs://close#');
+      var locationUrl = returnTo + encodeURIComponent(JSON.stringify(config));
+      window.location.href = locationUrl;
     });
   </script>
 </body>
