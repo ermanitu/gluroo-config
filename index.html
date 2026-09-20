@@ -64,7 +64,7 @@
       color: var(--text-muted);
       margin-bottom: 6px;
     }
-    input[type="text"], input[type="url"] {
+    input[type="text"] {
       width: 100%;
       padding: 12px 14px;
       background: var(--input-bg);
@@ -72,6 +72,7 @@
       border-radius: 10px;
       color: var(--text);
       font-size: 0.9rem;
+      font-family: monospace;
       transition: border-color 0.2s;
     }
     input:focus {
@@ -119,14 +120,14 @@
     <form id="configForm">
       <div class="form-group">
         <label for="nightscout_url">1. URL del Servidor / Gluroo</label>
-        <div class="input-desc">Incluye el puerto asignado (ej: <code>https://e8ba.ns.gluroo.com:39893</code>)</div>
-        <input type="text" id="nightscout_url" placeholder="https://xxxx.ns.gluroo.com:PUERTO" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="input-desc">Incluye el puerto asignado (ej: <code>https://a1b2.ns.gluroo.com:12345</code>)</div>
+        <input type="text" id="nightscout_url" placeholder="https://a1b2.ns.gluroo.com:12345" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
 
       <div class="form-group">
         <label for="api_key">2. Token de Seguridad / API Secret</label>
         <div class="input-desc">Token alfanumérico copiado de Gluroo</div>
-        <input type="text" id="api_key" placeholder="e8bae8c4-0c1e-4b5b-9387-698fc0fd6cf4" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input type="text" id="api_key" placeholder="a1b2c3d4-e5f6-7890-abcd-ef1234567890" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
 
       <button type="submit" class="btn-save">💾 Guardar Configuración</button>
@@ -134,12 +135,12 @@
 
     <div class="help-card">
       <strong>¿Dónde encontrar estos datos?</strong><br>
-      Abre la app <strong>Gluroo</strong> en tu móvil ➡️ ⚙️ <strong>Ajustes</strong> ➡️ <strong>Account</strong> (o <em>Nightscout Bridge</em>) y copia tu <strong>Nightscout Host/URL</strong> y tu <strong>Security Token</strong>.
+      Abre la app <strong>Gluroo</strong> en tu móvil ➡️ ⚙️ <strong>Ajustes</strong> ➡️ <strong>Account</strong> (o <em>Nightscout Bridge</em>) y copia tu <strong>Nightscout Host / URL</strong> y tu <strong>Security Token</strong>.
     </div>
   </div>
 
   <script>
-    // 1. Leer parámetros iniciales de la URL (si Pebble los envía)
+    // 1. Leer parámetros iniciales de la URL
     function getQueryParam(variable, defaultVal) {
       var query = window.location.search.substring(1);
       var vars = query.split('&');
@@ -152,7 +153,7 @@
       return defaultVal || '';
     }
 
-    // Cargar valores iniciales
+    // Cargar valores iniciales si el usuario ya los tenía guardados
     var urlInput = document.getElementById('nightscout_url');
     var keyInput = document.getElementById('api_key');
 
@@ -169,13 +170,13 @@
       var enteredUrl = urlInput.value.trim();
       var enteredKey = keyInput.value.trim();
 
-      // Si el usuario pegó la URL completa en el campo de Token, intentar auto-extraer
+      // Si el usuario pegó la URL completa en el campo de Token, extraerla automáticamente
       if (enteredKey.indexOf('http') === 0 && !enteredUrl) {
         enteredUrl = enteredKey;
         enteredKey = '';
       }
 
-      // Limpiar URL: quitar /api/v1... o barras al final
+      // Limpiar URL: quitar /api/v1... o barras finales
       if (enteredUrl) {
         enteredUrl = enteredUrl.replace(/\/api\/v1.*$/i, '').replace(/\/+$/, '');
       }
@@ -183,7 +184,7 @@
       var config = {
         nightscout_url: enteredUrl,
         api_key: enteredKey,
-        gluroo_token: enteredKey // retrocompatibilidad
+        gluroo_token: enteredKey // retrocompatibilidad con esferas anteriores
       };
 
       // Guardar localmente en el navegador del móvil
